@@ -8,45 +8,75 @@
 [![Swarms Framework](https://img.shields.io/badge/Built%20with-Swarms-blue)](https://github.com/kyegomez/swarms)
 
 
+# Protocol
 
-## 🚀 Quick Start
+```python
+from abc import ABC, abstractmethod
+from swarms import Agent
 
-```bash
-# Clone the repository
-git clone https://github.com/The-Swarm-Corporation/Swarms-Example-1-Click-Template.git
+class MemoryWrapper(ABC):
+    @abstractmethod
+    def add(self, doc: str):
+        pass  # Abstract method for adding an item
 
-# Install requirements
-pip3 install -r requirements.txt
-
-# Set your task in the .env file or pass it in the yaml file on the bottom `task:`
-export WORKSPACE_DIR="agent_workspace" 
-export GROQ_API_KEY=""
-
-# Run the swarm
-python3 main.py
+    @abstractmethod
+    def query(self, query: str):
+        pass  # Abstract method for querying items
+    
+    
+agent = Agent(
+    long_term_memory=MemoryWrapper()
+)
 ```
 
 
-## 🛠 Built With
+## Full Example
 
-- [Swarms Framework](https://github.com/kyegomez/swarms)
-- Python 3.10+
-- GROQ API Key or you can change it to use any model from [Swarm Models](https://github.com/The-Swarm-Corporation/swarm-models)
+```python
+import os
+from swarms import Agent
+from swarm_models import OpenAIChat
+from swarms_memory import ChromaDB
+from swarms.prompts.finance_agent_sys_prompt import (
+    FINANCIAL_AGENT_SYS_PROMPT,
+)
+from dotenv import load_dotenv
 
-## 📬 Contact
+load_dotenv()
 
-Questions? Reach out:
-- Twitter: [@kyegomez](https://twitter.com/kyegomez)
-- Email: kye@swarms.world
+# Get the OpenAI API key from the environment variable
+api_key = os.getenv("OPENAI_API_KEY")
 
----
+# Create an instance of the OpenAIChat class
+model = OpenAIChat(
+    openai_api_key=api_key, model_name="gpt-4o-mini", temperature=0.1
+)
 
-## Want Real-Time Assistance?
+# Initialize the agent
+agent = Agent(
+    agent_name="Financial-Analysis-Agent",
+    system_prompt=FINANCIAL_AGENT_SYS_PROMPT,
+    llm=model,
+    max_loops=1,
+    autosave=True,
+    dashboard=False,
+    verbose=True,
+    dynamic_temperature_enabled=True,
+    saved_state_path="finance_agent.json",
+    user_name="swarms_corp",
+    retry_attempts=1,
+    context_length=200000,
+    return_step_meta=False,
+    output_type="string",
+    streaming_on=False,
+    long_term_memory=ChromaDB()
+)
 
-[Book a call with here for real-time assistance:](https://cal.com/swarms/swarms-onboarding-session)
 
----
+agent.run(
+    "How can I establish a ROTH IRA to buy stocks and get a tax break? What are the criteria"
+)
 
-⭐ Star us on GitHub if this project helped you!
 
-Built with ♥ using [Swarms Framework](https://github.com/kyegomez/swarms)
+
+```
