@@ -120,6 +120,7 @@ graph LR
     class D shared;
     classDef own fill:#ccf,stroke:#f66,stroke-width:2px;
     class A1,B1,C1 own;
+```
 
 ## Advanced Configuration
 
