@@ -10,15 +10,7 @@
 
 ## Overview
 
-The **AgentRAGProtocol** is a sophisticated framework designed to facilitate intelligent interactions with users through advanced AI agents. This protocol leverages the capabilities of the Swarms framework and integrates with OpenAI's models to provide dynamic and context-aware responses.
-
-## Features
-
-- **Memory Management**: Utilizes a memory wrapper to manage long-term memory, allowing agents to retain and recall information across sessions.
-- **Customizable Agents**: Create agents tailored to specific tasks, such as financial analysis, using customizable parameters.
-- **Environment Configuration**: Load environment variables for secure API key management.
-- **Dynamic Interaction**: Engage users with real-time responses based on their queries.
-
+The **AgentRAGProtocol** is a simple framework and methodology to streamline integration of RAG systems into Agents through a seamless abstraction. 
 
 
 # Protocol
@@ -90,6 +82,30 @@ agent.run(
     "How can I establish a ROTH IRA to buy stocks and get a tax break? What are the criteria"
 )
 
+```
 
+
+# Behind Scenes in Agent
+
+
+```mermaid
+graph TD
+    A[User Query] -->|Sends Query| B[RAG System]
+    B -->|Retrieves Relevant Documents| C[Document Store]
+    C -->|Returns Documents| B
+    B -->|Sends Context| D[LLM]
+    D -->|Generates Response| A
+    D -->|Updates Memory| E[Memory Component]
+    E -->|Stores Context| C
 
 ```
+
+
+
+## License
+
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+## Contact
+
+For further inquiries, please reach out via [Discord](https://discord.gg/agora-999382051935506503) or [LinkedIn](https://www.linkedin.com/in/kye-g-38759a207/).
