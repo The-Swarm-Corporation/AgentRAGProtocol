@@ -106,23 +106,20 @@ agent.run(
 )
 ```
 
-## Multi-Agent RAG Explained
-
-The AgentRAGProtocol enables multiple agents to share a unified knowledge base through the following mechanisms:
-
-1. **Shared Memory Pool**: All agents access the same vector store through the MemoryWrapper abstraction
-2. **Concurrent Access**: Built-in support for concurrent read/write operations
-3. **Context Preservation**: Maintains context across different agent interactions
-4. **Knowledge Synchronization**: Updates are immediately available to all agents
-5. **Memory Versioning**: Tracks changes and maintains consistency across agent interactions
-
-### Key Components
-
-- **MemoryWrapper**: Abstract interface for RAG operations
-- **Vector Store**: Underlying database for document storage and retrieval
-- **Agent Interface**: Standardized way for agents to interact with the memory system
-- **Query Router**: Manages and optimizes multi-agent queries
-- **Context Manager**: Maintains consistency across agent interactions
+```mermaid
+graph LR
+    A[Agent 1] -->|Own RAG|> A1[MemoryWrapper]
+    B[Agent 2] -->|Own RAG|> B1[MemoryWrapper]
+    C[Agent 3] -->|Own RAG|> C1[MemoryWrapper]
+    A1 -->|Shared RAG|> D[Vector Store]
+    B1 -->|Shared RAG|> D[Vector Store]
+    C1 -->|Shared RAG|> D[Vector Store]
+    D -->|Agent Interface|> E[Query Router]
+    E -->|Context Manager|> D
+    classDef shared fill:#f9f,stroke:#333,stroke-width:4px;
+    class D shared;
+    classDef own fill:#ccf,stroke:#f66,stroke-width:2px;
+    class A1,B1,C1 own;
 
 ## Advanced Configuration
 
