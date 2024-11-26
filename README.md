@@ -1,19 +1,46 @@
-
 # AgentRAGProtocol
 
 [![Join our Discord](https://img.shields.io/badge/Discord-Join%20our%20server-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/agora-999382051935506503) [![Subscribe on YouTube](https://img.shields.io/badge/YouTube-Subscribe-red?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@kyegomez3242) [![Connect on LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/kye-g-38759a207/) [![Follow on X.com](https://img.shields.io/badge/X.com-Follow-1DA1F2?style=for-the-badge&logo=x&logoColor=white)](https://x.com/kyegomezb)
-
-
 [![GitHub stars](https://img.shields.io/github/stars/The-Swarm-Corporation/Legal-Swarm-Template?style=social)](https://github.com/The-Swarm-Corporation/Legal-Swarm-Template)
 [![Swarms Framework](https://img.shields.io/badge/Built%20with-Swarms-blue)](https://github.com/kyegomez/swarms)
 
-
 ## Overview
 
-The **AgentRAGProtocol** is a simple framework and methodology to streamline integration of RAG systems into Agents through a seamless abstraction. 
+AgentRAGProtocol is an enterprise-grade framework that revolutionizes the integration of Retrieval-Augmented Generation (RAG) systems with AI agents. By providing a unified abstraction layer, it enables seamless multi-agent access to shared knowledge bases while maintaining context consistency and operational efficiency.
 
+## Key Features
 
-# Protocol
+- **Unified Memory Interface**: Abstract implementation of RAG systems through a standardized MemoryWrapper
+- **Multi-Agent Support**: Enables multiple agents to access and update shared knowledge bases
+- **Enterprise-Ready**: Built for production environments with scalability in mind
+- **Framework Agnostic**: Compatible with various LLM providers and vector stores
+- **Type-Safe**: Implements strict typing for enhanced reliability
+- **Extensible Architecture**: Easy to customize and extend for specific use cases
+
+## Architecture
+
+The AgentRAGProtocol implements a sophisticated multi-agent RAG system where multiple agents can interact with a shared knowledge base:
+
+```mermaid
+graph TD
+    A[User Query] -->|Sends Query| B[RAG System]
+    B -->|Retrieves Relevant Documents| C[Document Store]
+    C -->|Returns Documents| B
+    B -->|Sends Context| D[LLM]
+    D -->|Generates Response| A
+    D -->|Updates Memory| E[Memory Component]
+    E -->|Stores Context| C
+```
+
+## Quick Start
+
+### Installation
+
+```bash
+pip install swarms swarm-models swarm-memory
+```
+
+### Basic Usage
 
 ```python
 from abc import ABC, abstractmethod
@@ -23,44 +50,40 @@ class MemoryWrapper(ABC):
     @abstractmethod
     def add(self, doc: str):
         pass  # Abstract method for adding an item
-
+    
     @abstractmethod
     def query(self, query: str):
         pass  # Abstract method for querying items
-    
-    
+
 agent = Agent(
     long_term_memory=MemoryWrapper()
 )
 ```
 
-
-## Full Example
+### Complete Implementation Example
 
 ```python
 import os
 from swarms import Agent
 from swarm_models import OpenAIChat
 from swarms_memory import ChromaDB
-from swarms.prompts.finance_agent_sys_prompt import (
-    FINANCIAL_AGENT_SYS_PROMPT,
-)
 from dotenv import load_dotenv
 
+# Environment setup
 load_dotenv()
-
-# Get the OpenAI API key from the environment variable
 api_key = os.getenv("OPENAI_API_KEY")
 
-# Create an instance of the OpenAIChat class
+# Initialize OpenAI model
 model = OpenAIChat(
-    openai_api_key=api_key, model_name="gpt-4o-mini", temperature=0.1
+    openai_api_key=api_key,
+    model_name="gpt-4o-mini",
+    temperature=0.1
 )
 
-# Initialize the agent
+# Configure agent with RAG capabilities
 agent = Agent(
     agent_name="Financial-Analysis-Agent",
-    system_prompt=FINANCIAL_AGENT_SYS_PROMPT,
+    system_prompt="You're a financial analysis agent",
     llm=model,
     max_loops=1,
     autosave=True,
@@ -77,35 +100,97 @@ agent = Agent(
     long_term_memory=ChromaDB()
 )
 
-
+# Execute query
 agent.run(
     "How can I establish a ROTH IRA to buy stocks and get a tax break? What are the criteria"
 )
-
 ```
 
+## Multi-Agent RAG Explained
 
-# Behind Scenes in Agent
+The AgentRAGProtocol enables multiple agents to share a unified knowledge base through the following mechanisms:
 
+1. **Shared Memory Pool**: All agents access the same vector store through the MemoryWrapper abstraction
+2. **Concurrent Access**: Built-in support for concurrent read/write operations
+3. **Context Preservation**: Maintains context across different agent interactions
+4. **Knowledge Synchronization**: Updates are immediately available to all agents
+5. **Memory Versioning**: Tracks changes and maintains consistency across agent interactions
 
-```mermaid
-graph TD
-    A[User Query] -->|Sends Query| B[RAG System]
-    B -->|Retrieves Relevant Documents| C[Document Store]
-    C -->|Returns Documents| B
-    B -->|Sends Context| D[LLM]
-    D -->|Generates Response| A
-    D -->|Updates Memory| E[Memory Component]
-    E -->|Stores Context| C
+### Key Components
 
+- **MemoryWrapper**: Abstract interface for RAG operations
+- **Vector Store**: Underlying database for document storage and retrieval
+- **Agent Interface**: Standardized way for agents to interact with the memory system
+- **Query Router**: Manages and optimizes multi-agent queries
+- **Context Manager**: Maintains consistency across agent interactions
+
+## Advanced Configuration
+
+### Custom Memory Implementation
+
+```python
+class CustomMemory(MemoryWrapper):
+    def add(self, doc: str):
+        # Custom implementation for adding documents
+        pass
+
+    def query(self, query: str):
+        # Custom implementation for querying documents
+        pass
 ```
 
+### Agent Configuration Options
 
+```python
+agent_config = {
+    "max_loops": 1,
+    "autosave": True,
+    "dashboard": False,
+    "verbose": True,
+    "dynamic_temperature_enabled": True,
+    "context_length": 200000,
+    "streaming_on": False
+}
+```
+
+## Performance Optimization
+
+- Implement caching for frequently accessed documents
+- Use batch processing for multiple queries
+- Enable document compression for storage efficiency
+- Implement query optimization strategies
+- Configure appropriate vector store indexes
+
+## Best Practices
+
+1. Regular memory cleanup and optimization
+2. Implement proper error handling
+3. Monitor agent interactions
+4. Set up logging and analytics
+5. Regular backup of vector stores
+6. Implementation of rate limiting
+7. Security considerations for multi-agent access
+
+## Contributing
+
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
 
 ## License
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-## Contact
+## Support
 
-For further inquiries, please reach out via [Discord](https://discord.gg/agora-999382051935506503) or [LinkedIn](https://www.linkedin.com/in/kye-g-38759a207/).
+- [Discord Community](https://discord.gg/agora-999382051935506503)
+- [Documentation](https://docs.swarms.ai)
+- [GitHub Issues](https://github.com/kyegomez/swarms/issues)
+
+## Connect With Us
+
+- [LinkedIn](https://www.linkedin.com/in/kye-g-38759a207/)
+- [YouTube](https://www.youtube.com/@kyegomez3242)
+- [X.com](https://x.com/kyegomezb)
+
+---
+
+Built with ❤️ by the Swarms Team
