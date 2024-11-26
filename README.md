@@ -108,16 +108,12 @@ agent.run(
 
 ```mermaid
 graph LR
-    A[Agent 1] -->|Own RAG| A1[MemoryWrapper]
-    B[Agent 2] -->|Own RAG| B1[MemoryWrapper]
-    C[Agent 3] -->|Own RAG| C1[MemoryWrapper]
-    A1 -->|Shared RAG| D[Vector Store]
-    B1 -->|Shared RAG| D
-    C1 -->|Shared RAG| D
+    D[Vector Store] -->|Shared RAG| A[Agent 1]
+    D -->|Shared RAG| B[Agent 2]
+    D -->|Shared RAG| C[Agent 3]
     D -->|Agent Interface| E[Query Router]
     E -->|Context Manager| D
     class D shared;
-    class A1,B1,C1 own;
 ```
 
 ## Advanced Configuration
