@@ -106,44 +106,6 @@ agent.run(
 )
 ```
 
-```mermaid
-graph LR
-    D[Vector Store] -->|Shared RAG| A[Agent 1]
-    D -->|Shared RAG| B[Agent 2]
-    D -->|Shared RAG| C[Agent 3]
-    D -->|Agent Interface| E[Query Router]
-    E -->|Context Manager| D
-    class D shared;
-```
-
-## Advanced Configuration
-
-### Custom Memory Implementation
-
-```python
-class CustomMemory(MemoryWrapper):
-    def add(self, doc: str):
-        # Custom implementation for adding documents
-        pass
-
-    def query(self, query: str):
-        # Custom implementation for querying documents
-        pass
-```
-
-### Agent Configuration Options
-
-```python
-agent_config = {
-    "max_loops": 1,
-    "autosave": True,
-    "dashboard": False,
-    "verbose": True,
-    "dynamic_temperature_enabled": True,
-    "context_length": 200000,
-    "streaming_on": False
-}
-```
 
 ## Performance Optimization
 
