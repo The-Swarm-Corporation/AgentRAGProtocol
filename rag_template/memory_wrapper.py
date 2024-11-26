@@ -10,6 +10,10 @@ class MemoryWrapper(ABC):
     def query(self, query: str):
         pass  # Abstract method for querying items
     
+    @abstractmethod
+    def delete(self, doc: str):
+        pass
+    
     
 agent = Agent(
     long_term_memory=MemoryWrapper()
